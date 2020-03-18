@@ -9,6 +9,11 @@ class TestVideo(APITestCase):
 
     def setUp(self):
         self.url = reverse("api:video-list")
+        Video.objects.create(title="test_title", video_link="test/link")
 
     def test_get_videos(self):
         res = self.client.get(self.url)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        self.assertEqual(res.data[0]['title'], 'test_title')

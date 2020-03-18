@@ -1,16 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Video(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
-    video_link = models.FilePathField()
+    video_link = models.FilePathField(path=settings.MEDIA_ROOT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return title
+        return self.title
 
 
 class Comment(models.Model):
@@ -22,4 +23,4 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return text
+        return self.text
