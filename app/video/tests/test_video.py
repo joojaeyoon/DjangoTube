@@ -9,7 +9,9 @@ class TestVideo(APITestCase):
 
     def setUp(self):
         self.video = Video.objects.create(
-            title="test title", video_link="test/link")
+            title="test title",
+            description="test description",
+            video_link="test/link")
 
     def test_get_videos(self):
         url = reverse("api:video-list")
@@ -22,10 +24,11 @@ class TestVideo(APITestCase):
         self.assertIsNone(res.data[0].get("description"))
 
     def test_get_video_detail(self):
-        url = reverse("api:video-detail", kwargs={id: self.video.id})
+        url = reverse("api:video-detail", kwargs={"pk": self.video.id})
 
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
         self.assertIsNotNone(res.data.get("description"))
+        self.assertEqual(res.data.get("slug"),
+                         self.video.title.replace(" ", "-"))
