@@ -1,11 +1,12 @@
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
-from video.models import Video
+from video.models import Comment, Video
 
-from .serializers import VideoDetailSerializer, VideoSerializer
-from .pagination import VideoPagination
+from .pagination import CommentPagination, VideoPagination
+from .serializers import (CommentSerializer, VideoDetailSerializer,
+                          VideoSerializer)
 
 
 class VideoListAPIView(generics.ListAPIView):
@@ -26,3 +27,14 @@ class VideoRetrieveAPIView(generics.RetrieveAPIView):
         video.save()
 
         return video
+
+
+class CommentListAPIView(generics.ListAPIView):
+    queryset = Comment.objects.order_by("created_at")
+    serializer_class = CommentSerializer
+    pagination_class = CommentPagination
+
+    def list(self, request, *args, **kwargs):
+        self.queryset = Comment.objects.filter(
+            video=kwargs.get("pk")).order_by("created_at")
+        return super().list(request, *args, **kwargs)

@@ -1,9 +1,9 @@
+from django.contrib.auth.models import User
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from video.models import Video, Comment
 
-from django.urls import reverse
-from django.contrib.auth.models import User
+from video.models import Comment, Video
 
 
 class TestComment(APITestCase):
@@ -27,7 +27,7 @@ class TestComment(APITestCase):
     def test_get_comments(self):
         """ 특정 동영상 댓글 조회 테스트 """
 
-        url = reverse("api:comment-list", kwargs={"pk", self.video.id})
+        url = reverse("api:comment-list", kwargs={"pk": self.video.id})
 
         res = self.client.get(url)
 
