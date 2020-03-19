@@ -7,7 +7,7 @@ from app.utils import generate_random_string
 import cv2
 
 
-def get_video_data(filepath):
+def get_video_data(filepath, slug):
     video = cv2.VideoCapture(filepath)
 
     frame_count = video.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -17,7 +17,11 @@ def get_video_data(filepath):
 
     _, frame = video.read()
 
-    cv2.imwrite(filepath+"-thumbnail.png", frame)
+    filepath = filepath.split("/")[:-1]
+    filepath = "/".join(filepath).replace("videos", "thumbnails", 1)
+    filepath += f"/{slug}.png"
+
+    cv2.imwrite(filepath, frame)
 
     video.release()
 
@@ -28,7 +32,7 @@ def get_video_data(filepath):
 
     time = f'{minutes}:{seconds}'
 
-    return time
+    return [time, filepath]
 
 
 class Video(models.Model):
@@ -36,7 +40,7 @@ class Video(models.Model):
         User, on_delete=models.CASCADE, related_name="videos")
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
-    video_link = models.FilePathField(path=settings.MEDIA_ROOT)
+    video_link = models.FilePathField(path=settings.MEDIA_ROOT+"/videos")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     thumbnail = models.ImageField(blank=True)
@@ -49,9 +53,9 @@ class Video(models.Model):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.slug = slugify(self.title, allow_unicode=True) + \
             "-"+generate_random_string()
-        self.time = get_video_data(self.video_link)
+        self.time, thumbnail_path = get_video_data(self.video_link, self.slug)
         self.video_link = "/"+"/".join(self.video_link.split("/")[2:])
-        self.thumbnail = f"{self.video_link}-thumbnail.png"
+        self.thumbnail = "/"+"/".join(thumbnail_path.split("/")[2:])
 
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
