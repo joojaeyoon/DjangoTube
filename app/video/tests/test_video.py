@@ -15,7 +15,7 @@ class TestVideo(APITestCase):
             author=self.user,
             title="test title",
             description="test description",
-            video_link="test/link")
+            video_link="media/test.mp4")
 
     def test_get_videos(self):
         url = reverse("api:video-list")
@@ -34,5 +34,3 @@ class TestVideo(APITestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(res.data.get("description"))
-        self.assertEqual(res.data.get("slug"),
-                         self.video.title.replace(" ", "-"))
