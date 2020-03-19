@@ -9,22 +9,25 @@ from app.utils import generate_random_string, get_video_data
 class Video(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="videos")
+
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
+
     video_link = models.FilePathField(path=settings.MEDIA_ROOT+"/videos")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     thumbnail = models.ImageField(blank=True)
+
     time = models.CharField(max_length=12, blank=True)
     slug = models.SlugField(max_length=50, blank=True, unique=True)
     view_count = models.PositiveIntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        if self.thumbnail is None:
+        if self.thumbnail == "":
             self.slug = slugify(self.title, allow_unicode=True) + \
                 "-"+generate_random_string()
             self.time, thumbnail_path = get_video_data(
@@ -36,10 +39,11 @@ class Video(models.Model):
 
 
 class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(
         Video, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

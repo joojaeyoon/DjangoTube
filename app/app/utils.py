@@ -30,8 +30,13 @@ def get_video_data(filepath, slug):
 
     duration = frame_count/fps
 
-    minutes = int(duration/60)
-    seconds = int(duration % 60)
+    minutes = str(int(duration/60))
+    seconds = str(int(duration % 60))
+
+    if len(minutes) == 1:
+        minutes = "0"+minutes
+    if len(seconds) == 1:
+        seconds = "0"+seconds
 
     time = f'{minutes}:{seconds}'
 
