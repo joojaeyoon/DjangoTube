@@ -1,3 +1,8 @@
 *.pyc
 
 staticfiles/
+
+*.mp4
+*.png
+
+migrations/

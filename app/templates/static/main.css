@@ -1,0 +1,25 @@
+.video_list {
+  min-width: 696px;
+  list-style: none;
+  padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  margin-right: 16px;
+  margin-left: 16px;
+  margin-top: 24px;
+}
+
+.video_list li {
+  display: inline;
+  margin: 5px;
+}
+
+.thumbnail {
+  width: 350px;
+}
+
+.thumbnail:hover {
+  cursor: pointer;
+}
