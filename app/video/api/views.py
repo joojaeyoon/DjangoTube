@@ -17,3 +17,12 @@ class VideoListAPIView(generics.ListAPIView):
 class VideoRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
+
+    def get_object(self):
+        """ 비디오 조회시 조회수 ++ """
+        video = super().get_object()
+        video.view_count = video.view_count+1
+
+        video.save()
+
+        return video

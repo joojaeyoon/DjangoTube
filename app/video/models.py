@@ -17,17 +17,20 @@ class Video(models.Model):
     thumbnail = models.ImageField(blank=True)
     time = models.CharField(max_length=12, blank=True)
     slug = models.SlugField(max_length=50, blank=True, unique=True)
-    view_count = models.PositiveIntegerField()
+    view_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.title, allow_unicode=True) + \
-            "-"+generate_random_string()
-        self.time, thumbnail_path = get_video_data(self.video_link, self.slug)
-        self.video_link = "/"+"/".join(self.video_link.split("/")[2:])
-        self.thumbnail = "/"+"/".join(thumbnail_path.split("/")[2:])
+
+        if self.thumbnail is None:
+            self.slug = slugify(self.title, allow_unicode=True) + \
+                "-"+generate_random_string()
+            self.time, thumbnail_path = get_video_data(
+                self.video_link, self.slug)
+            self.video_link = "/"+"/".join(self.video_link.split("/")[2:])
+            self.thumbnail = "/"+"/".join(thumbnail_path.split("/")[2:])
 
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
