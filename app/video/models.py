@@ -5,6 +5,8 @@ from django.utils.text import slugify
 
 
 class Video(models.Model):
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="videos")
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
     video_link = models.FilePathField(path=settings.MEDIA_ROOT)

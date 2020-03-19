@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -8,7 +9,10 @@ from video.models import Comment, Video
 class TestVideo(APITestCase):
 
     def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
         self.video = Video.objects.create(
+            author=self.user,
             title="test title",
             description="test description",
             video_link="test/link")
