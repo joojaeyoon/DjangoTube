@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.text import slugify
 
+from app.utils import generate_random_string
 import cv2
 
 
@@ -40,13 +41,14 @@ class Video(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     thumbnail = models.ImageField(blank=True)
     time = models.CharField(max_length=12, blank=True)
-    slug = models.SlugField(max_length=50, blank=True)
+    slug = models.SlugField(max_length=50, blank=True, unique=True)
 
     def __str__(self):
         return self.title
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.title, allow_unicode=True)
+        self.slug = slugify(self.title, allow_unicode=True) + \
+            "-"+generate_random_string()
         self.time = get_video_data(self.video_link)
         self.video_link = "/"+"/".join(self.video_link.split("/")[2:])
         self.thumbnail = f"{self.video_link}-thumbnail.png"

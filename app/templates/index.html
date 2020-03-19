@@ -14,7 +14,9 @@
       {% for video in videos %}
       <li>
         <div>
-          <img class="thumbnail" src="{{video.thumbnail}}" />
+          <a href="/videos/{{video.slug}}">
+            <img class="thumbnail" src="{{video.thumbnail}}" />
+          </a>
           <p>{{video.title}} <span>{{video.time}}</span></p>
         </div>
       </li>
