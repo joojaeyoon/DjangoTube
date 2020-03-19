@@ -14,10 +14,11 @@
       {% for video in videos %}
       <li>
         <div>
-          <a href="/videos/{{video.slug}}">
+          <a href="/videos/{{video.slug}}" class="video_box">
             <img class="thumbnail" src="{{video.thumbnail}}" />
+            <span class="video_time">{{video.time}}</span>
           </a>
-          <p>{{video.title}} <span>{{video.time}}</span></p>
+          <p>{{video.title}}</p>
         </div>
       </li>
       {% endfor %}

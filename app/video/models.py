@@ -3,36 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.text import slugify
 
-from app.utils import generate_random_string
-import cv2
-
-
-def get_video_data(filepath, slug):
-    video = cv2.VideoCapture(filepath)
-
-    frame_count = video.get(cv2.CAP_PROP_FRAME_COUNT)
-    fps = video.get(cv2.CAP_PROP_FPS)
-
-    video.set(cv2.CAP_PROP_POS_FRAMES, int(frame_count/2))
-
-    _, frame = video.read()
-
-    filepath = filepath.split("/")[:-1]
-    filepath = "/".join(filepath).replace("videos", "thumbnails", 1)
-    filepath += f"/{slug}.png"
-
-    cv2.imwrite(filepath, frame)
-
-    video.release()
-
-    duration = frame_count/fps
-
-    minutes = int(duration/60)
-    seconds = int(duration % 60)
-
-    time = f'{minutes}:{seconds}'
-
-    return [time, filepath]
+from app.utils import generate_random_string, get_video_data
 
 
 class Video(models.Model):
@@ -46,6 +17,7 @@ class Video(models.Model):
     thumbnail = models.ImageField(blank=True)
     time = models.CharField(max_length=12, blank=True)
     slug = models.SlugField(max_length=50, blank=True, unique=True)
+    view_count = models.PositiveIntegerField()
 
     def __str__(self):
         return self.title
