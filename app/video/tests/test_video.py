@@ -18,6 +18,7 @@ class TestVideo(APITestCase):
             video_link="media/test.mp4")
 
     def test_get_videos(self):
+        """ 비디오 리스트 API 테스트 """
         url = reverse("api:video-list")
 
         res = self.client.get(url)
@@ -30,9 +31,26 @@ class TestVideo(APITestCase):
         self.assertIsNone(data[0].get("description"))
 
     def test_get_video_detail(self):
+        """ 비디오 디테일 API 테스트 """
         url = reverse("api:video-detail", kwargs={"pk": self.video.id})
 
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(res.data.get("description"))
+
+    def test_video_view_count(self):
+        """ 비디오 조회수 확인 테스트 """
+
+        url = reverse("api:video-detail", kwargs={"pk": self.video.id})
+
+        res = self.client.get(url)
+
+        prev_count = res.data.get("view_count")
+
+        res = self.client.get(url)
+
+        count = res.data.get("view_count")
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(prev_count+1, count)
