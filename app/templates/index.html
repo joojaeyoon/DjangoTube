@@ -6,23 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DjangoTube</title>
 
+    <link rel="icon" href="{% static "favicon.png" %}"/>
+
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    />
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet" />
+    <link href="{% static "css/mdb.min.css" %}" rel="stylesheet" />
+    <link href="{% static "css/style.css" %}" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="{% static "main.css" %}"/> -->
-    <link rel="stylesheet" href="static/main.css" />
+    <link rel="stylesheet" href="static/css/main.css" />
   </head>
   <body>
-    <ul class="video_list">
-      {% for video in videos %}
-      <li>
-        <div>
-          <a href="/videos/{{video.slug}}" class="video_box">
-            <img class="thumbnail" src="{{video.thumbnail}}" />
-            <span class="video_time">{{video.time}}</span>
-          </a>
-          <p>{{video.title}}</p>
-          <p>조회수 {{video.view_count}}</p>
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="NavBar">
+      <a class="logo h2" href="/"> DjangoTube</a>
+    </div>
+    <div class="container">
+      <div class="Menu">
+        Menu
+      </div>
+      <ul class="video_list"></ul>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" src="{% static "js/popper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/mdb.min.js" %}"></script>
+    <!-- <script src="{% static "js/main.js" %}" -->
+    <script src="static/js/main.js"></script>
   </body>
 </html>

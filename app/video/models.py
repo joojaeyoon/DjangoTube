@@ -32,8 +32,9 @@ class Video(models.Model):
                 "-"+generate_random_string()
             self.time, thumbnail_path = get_video_data(
                 self.video_link, self.slug)
+            self.thumbnail = thumbnail_path
             self.video_link = "/"+"/".join(self.video_link.split("/")[2:])
-            self.thumbnail = "/"+"/".join(thumbnail_path.split("/")[2:])
+            self.thumbnail = "/"+"/".join(thumbnail_path.split("/")[-2:])
 
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
