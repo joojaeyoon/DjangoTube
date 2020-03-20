@@ -1,7 +1,10 @@
 const ul = $(".video_list");
 
-$.get("/api/videos", function(data) {
-  data.results.map(d => {
+let data = {};
+
+function getVideos(res) {
+  data = res;
+  res.results.map(d => {
     const li = $("<li></li>");
     const div = $("<div></div>");
     const a = $("<a></a>");
@@ -24,9 +27,15 @@ $.get("/api/videos", function(data) {
     li.append(div);
     ul.append(li);
   });
-});
+}
+
+$.get("/api/videos", getVideos);
 
 ul.on("scroll", () => {
-  console.log(ul.prop("scrollTopMax"));
-  console.log(ul.scrollTop());
+  const max = ul.prop("scrollTopMax") * 0.8;
+  const scrollPos = ul.scrollTop();
+
+  if (max <= scrollPos && data.next !== null) {
+    $.get(data.next, getVideos);
+  }
 });

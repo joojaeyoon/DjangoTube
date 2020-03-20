@@ -2,6 +2,13 @@ body {
   overflow-y: hidden;
 }
 
+.NavBar {
+  background-color: burlywood;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+}
+
 .logo {
   margin-left: 15px;
   align-items: center;
@@ -12,10 +19,6 @@ body {
   color: black;
 }
 
-.NavBar {
-  background-color: burlywood;
-  height: 50px;
-}
 .container {
   display: flex;
   flex-direction: row;
@@ -25,8 +28,8 @@ body {
 }
 
 .Menu {
-  background-color: aqua;
-  width: 500px;
+  background-color: #4db6ac !important;
+  width: 15%;
 }
 
 .video_list {
@@ -37,6 +40,7 @@ body {
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 0;
+  max-width: 85%;
 
   background-color: #f9f9f9;
 
