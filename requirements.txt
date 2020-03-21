@@ -5,3 +5,6 @@ whitenoise
 psycopg2-binary
 opencv-python
 Pillow
+
+django-rest-auth
+django-allauth

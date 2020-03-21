@@ -33,19 +33,22 @@ body {
 }
 
 .video_list {
-  min-width: 696px;
   list-style: none;
-  padding-top: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+
+  padding-top: 20px;
+  padding-bottom: 50px;
   margin: 0;
+
+  min-width: 696px;
   max-width: 85%;
+  height: 100vh;
 
   background-color: #f9f9f9;
 
   overflow: auto;
-  height: 100vh;
 }
 
 .video_list li {
