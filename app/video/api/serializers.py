@@ -19,6 +19,8 @@ class VideoDetailSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
 
+    author = serializers.StringRelatedField()
+
     class Meta:
         model = Comment
         fields = "__all__"

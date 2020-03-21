@@ -10,12 +10,15 @@ from video.views import index, video
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('video.api.urls')),
-    path("", index, name="index"),
-    path("videos/<slug>", video, name="video-view"),
+
     path("api-auth/", include("rest_framework.urls")),
     path("rest-auth/", include("rest_auth.urls")),
-    path("rest-auth/registration/", include("rest_auth.registration.urls"))
+    path("rest-auth/registration/", include("rest_auth.registration.urls")),
+
+    path("", index, name="index"),
+    path('api/', include('video.api.urls')),
+    path("videos/<slug>", video, name="video-view"),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

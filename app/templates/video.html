@@ -1,23 +1,82 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DjangoTube - {{video.title}}</title>
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    />
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" /> 
+    <link rel="stylesheet" href="{% static "css/mdb.min.css" %}" /> 
+    <link rel="stylesheet"  href="{% static "css/style.css" %}" /> 
+    <link rel="stylesheet" href="{% static "css/video.css" %}" />
   </head>
   <body>
-    <video width="1280" controls>
-      <source src="{{video.video_link}}" />
-    </video>
+    <nav class="navbar navbar-expand-lg navbar-dark teal lighten-2">
+      <a class="navbar-brand" href="/">DjangoTube</a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline ml-auto">
+          <div class="md-form my-0">
+            <input
+              class="form-control mr-sm-2"
+              type="text"
+              placeholder="Search"
+              aria-label="Search"
+            />
+          </div>
+        </form>
+      </div>
+    </nav>
+    <div class="video-detail">
+      <div class="player-container">
+        <video class="player" controls>
+          <source src="{{video.video_link}}" />
+        </video>
+      </div>
+      <div class="video-info">
+        <div class="video-title">{{video.title}}</div>
+        <div class="video-view">조회수 {{video.view_count}}회</div>
+      </div>
+      <div class="comment-container">
+        <div class="comment-overall"></div>
+        <div class="comment-content"></div>
+      </div>
+    </div>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
+    <script type="text/javascript" src="{% static "js/popper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/mdb.min.js" %}"></script>
     <script>
-      $.get("/api/videos/{{video.id}}/comments", data => {
-        console.log(data);
+      $.get("/api/videos/{{video.id}}/comments", function(data) {
+        $(".comment-overall").text("댓글 " + data.count + "개");
+        const comments = $(".comment-content");
+
+        data.results.map(comment => {
+          const icon = $("<div class='comment-icon'></div>");
+          const time= $("<span></span>").text(comment.created_at);
+          const author = $("<span class='comment-author'></span>").text(
+            comment.author
+          );
+          const text = $("<span class='comment-text'></span>").text(
+            comment.text
+          );
+          const info = $("<div class='comment-info'></div>")
+            .append(author)
+            .append(text);
+          const commentDiv = $("<div class='comment'></div>")
+            .append(icon)
+            .append(info);
+          comments.append(commentDiv);
+        });
       });
     </script>
   </body>

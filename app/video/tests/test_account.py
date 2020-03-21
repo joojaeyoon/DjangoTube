@@ -71,3 +71,14 @@ class TestLogin(APITestCase):
         res = self.client.post(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_logout(self):
+        """ 로그아웃 테스트 """
+
+        self.client.login(username="testuser", password="password")  # Login
+
+        url = "/rest-auth/logout/"
+
+        res = self.client.post(url)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
