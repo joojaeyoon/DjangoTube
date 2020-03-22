@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase
 class TestUploadVideUnAuthorized(APITestCase):
 
     def setUp(self):
-        self.file = open("media/test.mp4", "r")
+        self.file = open("media/test.mp4", "rb")
         self.url = reverse("api:upload-video")
 
     def test_unauthorized_user_upload_video(self):
@@ -25,7 +25,7 @@ class TestUploadVideUnAuthorized(APITestCase):
 class TestUploadAuthorized(APITestCase):
 
     def setUp(self):
-        self.file = open("media/test.mp4", "r")
+        self.file = open("media/test.mp4", "rb")
         self.user = User.objects.create_user("testuser", "supersecret")
         self.url = reverse("api:upload-video")
 
@@ -40,7 +40,7 @@ class TestUploadAuthorized(APITestCase):
 
         res = self.client.post(self.url, payload)
 
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_upload_invalid_video(self):
         """ 유효하지 않은 비디오 업로드 테스트 """

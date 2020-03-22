@@ -11,13 +11,11 @@ body {
 }
 
 .logo {
-  margin-left: 15px;
-  align-items: center;
-  color: black;
+  margin-left: 10px;
 }
 
-.logo:hover {
-  color: black;
+.logo:active {
+  transform: translateY(3px);
 }
 
 .container {
