@@ -1,39 +1,51 @@
-const ul = $(".video_list");
+const videoList = $(".video_list");
+const loginButton = $("#Login-button");
 
-let data = {};
+let data = null;
+
+if (localStorage.getItem("token") !== null) {
+  loginButton.text("Logout");
+}
+
+loginButton.on("click", function() {
+  if (loginButton.text() === "Logout") {
+    loginButton.prop("href", "/");
+    localStorage.removeItem("token");
+  }
+});
 
 function getVideos(res) {
   data = res;
-  res.results.map(d => {
+  res.results.map(video => {
     const li = $("<li></li>");
-    const div = $("<div></div>");
-    const a = $("<a></a>");
-    const img = $("<img/>");
-    const time = $("<span></span>").text(d.time);
-    const title = $("<p></p>").text(d.title);
-    const views = $("<p></p>").text("조회수 " + d.view_count);
+    const videoDiv = $("<div></div>");
+    const vidoe_link = $("<a></a>");
+    const videoThumbnail = $("<img/>");
+    const time = $("<span></span>").text(video.time);
+    const title = $("<p></p>").text(video.title);
+    const views = $("<p></p>").text("조회수 " + video.view_count);
 
-    a.attr("href", "/videos/" + d.slug);
-    a.addClass("video_box");
-    img.attr("src", d.thumbnail);
-    img.addClass("thumbnail");
+    vidoe_link.attr("href", "/videos/" + video.slug);
+    vidoe_link.addClass("video_box");
+    videoThumbnail.attr("src", video.thumbnail);
+    videoThumbnail.addClass("thumbnail");
     time.addClass("video_time");
 
-    a.append(img).append(time);
-    div
-      .append(a)
+    vidoe_link.append(videoThumbnail).append(time);
+    videoDiv
+      .append(vidoe_link)
       .append(title)
       .append(views);
-    li.append(div);
-    ul.append(li);
+    li.append(videoDiv);
+    videoList.append(li);
   });
 }
 
 $.get("/api/videos", getVideos);
 
-ul.on("scroll", () => {
-  const max = ul.prop("scrollTopMax") * 0.8;
-  const scrollPos = ul.scrollTop();
+videoList.on("scroll", () => {
+  const max = videoList.prop("scrollTopMax") * 0.8;
+  const scrollPos = videoList.scrollTop();
 
   if (max <= scrollPos && data.next !== null) {
     $.get(data.next, getVideos);

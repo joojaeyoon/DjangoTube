@@ -26,3 +26,9 @@ def video(request, slug):
 def login(request):
 
     return render(request, 'login.html')
+
+
+def handle_uploaded_file(f):
+    with open(settings.MEDIA_ROOT+'videos/name.mp4', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)

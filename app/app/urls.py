@@ -18,7 +18,7 @@ urlpatterns = [
     path("", index, name="index"),
     path('api/', include('video.api.urls')),
     path("videos/<slug>", video, name="video-view"),
-    path("login/", login)
+    path("login/", login),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

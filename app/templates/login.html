@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="/static/css/login.css" />
   </head>
   <body>
-    <div class="card">
-      <h5 class="card-header info-color white-text text-center py-4">
+
+    <div id="Login" class="card">
+      <h5 class="card-header django-green white-text text-center py-4">
         <strong>Sign in</strong>
       </h5>
 
@@ -47,7 +48,7 @@
           </div>
           <!-- Sign in button -->
           <button
-            class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+            class="btn button-outline-django btn-rounded btn-block my-4 waves-effect z-depth-0"
             type="submit"
           >
             Sign in
@@ -55,7 +56,7 @@
           <!-- Register -->
           <p>
             Not a member?
-            <a href="">Register</a>
+            <a id="to-register">Register</a>
           </p>
 
           <!-- Social login -->
@@ -79,8 +80,8 @@
     <!-- Material form login -->
 
     <!-- Material form register -->
-    <div class="card">
-        <h5 class="card-header info-color white-text text-center py-4">
+    <div id="Register" class="card">
+        <h5 class="card-header django-green white-text text-center py-4">
             <strong>Sign up</strong>
         </h5>
         <!--Card content-->
@@ -106,13 +107,13 @@
                     </small>
                 </div>
                 <!-- Sign up button -->
-                <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">
+                <button class="btn button-outline-django btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">
                     Sign up
                 </button>
                 <!-- Register -->
                 <p>
                     Already a member?
-                    <a href="">Login</a>
+                    <a id="to-login">Login</a>
                 </p>
                 <!-- Social register -->
                 <p>or sign up with:</p>
@@ -133,7 +134,6 @@
         </div>
     </div>
     <!-- Material form register -->
-
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -164,6 +164,7 @@
           .done(function(res, statusText, xhr) {
             console.log("Login success!");
             localStorage.setItem("token",res.key);
+            window.location.href="/";
           })
           .fail(function(xhr, statusText) { // 에러처리 하기
             console.log("Login failure!");
@@ -188,6 +189,7 @@
           .done(function(res, statusText, xhr) {
             console.log("register success!");
             localStorage.setItem("token",res.key);
+            window.location.href="/";
           })
           .fail(function(xhr, statusText) {
             console.log(xhr.responseJSON); // 에러처리 하기
@@ -195,6 +197,16 @@
             console.log(statusText);
           });
       });
+
+      $("#to-register").on("click",()=>{
+          $("#Login").hide();
+          $("#Register").show();          
+      })
+      $("#to-login").on("click",()=>{
+        $("#Login").show();
+        $("#Register").hide();
+
+      })
     </script>
   </body>
 </html>
