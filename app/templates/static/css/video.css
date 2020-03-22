@@ -19,18 +19,39 @@
 
 .video-info {
   margin-left: 3rem;
+  border-bottom: 1px #cfcfcf solid;
+  margin-right: 3rem;
 }
 
 .video-title {
-  font-size: 36px;
+  font-size: 28px;
+  margin-top: 10px;
+}
+
+.video-date {
+  font-size: 14px;
+  color: gray;
+  margin-left: 15px;
 }
 .video-view {
+  font-size: 14px;
+  color: gray;
+}
+
+.video-author {
+  margin-left: 3rem;
+  margin-top: 20px;
 }
 
 .comment-container {
-  font-size: 24px;
+  font-size: 20px;
   margin-top: 30px;
   margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.comment-overall {
+  border-bottom: 1px #cfcfcf solid;
 }
 
 .comment-content {

@@ -83,3 +83,22 @@ body {
   width: 15%;
   height: 10%;
 }
+
+.login {
+  background-color: #1abc9c;
+  border: white solid 1px;
+  color: white;
+  margin-left: 30px;
+  padding: 5px 15px 5px 15px;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.login:hover {
+  color: white;
+  transform: translateY(3px);
+}
+
+.login:active {
+  color: black;
+}

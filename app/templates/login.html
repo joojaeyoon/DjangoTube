@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DjangoTube - Login</title>
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    />
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" /> <link
+    rel="stylesheet" href="{% static "css/mdb.min.css" %}" /> <link
+    rel="stylesheet" href="{% static "css/style.css" %}" />
+
+    <!-- <link rel="stylesheet" href="{% static "css/login.css" %}" /> -->
+    <link rel="stylesheet" href="/static/css/login.css" />
+  </head>
+  <body>
+    <div class="card">
+      <h5 class="card-header info-color white-text text-center py-4">
+        <strong>Sign in</strong>
+      </h5>
+
+      <div class="card-body px-lg-5 pt-0">
+        <!-- Form -->
+        <form id="login-form" class="text-center" style="color: #757575;">
+          {% csrf_token %}
+          <!-- Username -->
+          <div class="md-form">
+            <input
+              type="text"
+              id="materialLoginFormUsername"
+              class="form-control"
+            />
+            <label for="materialLoginFormUsername">Username</label>
+          </div>
+          <!-- Password -->
+          <div class="md-form">
+            <input
+              type="password"
+              id="materialLoginFormPassword"
+              class="form-control"
+            />
+            <label for="materialLoginFormPassword">Password</label>
+          </div>
+          <!-- Sign in button -->
+          <button
+            class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+            type="submit"
+          >
+            Sign in
+          </button>
+          <!-- Register -->
+          <p>
+            Not a member?
+            <a href="">Register</a>
+          </p>
+
+          <!-- Social login -->
+          <p>or sign in with:</p>
+          <a type="button" class="btn-floating btn-fb btn-sm">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a type="button" class="btn-floating btn-tw btn-sm">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a type="button" class="btn-floating btn-li btn-sm">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a type="button" class="btn-floating btn-git btn-sm">
+            <i class="fab fa-github"></i>
+          </a>
+        </form>
+        <!-- Form -->
+      </div>
+    </div>
+    <!-- Material form login -->
+
+    <!-- Material form register -->
+    <div class="card">
+        <h5 class="card-header info-color white-text text-center py-4">
+            <strong>Sign up</strong>
+        </h5>
+        <!--Card content-->
+        <div class="card-body px-lg-5 pt-0">
+            <!-- Form -->
+            <form id="register-form" class="text-center" style="color: #757575;" action="#!">
+                {% csrf_token %}
+                <!-- Username -->
+                <div class="md-form mt-3">
+                    <input type="text" id="materialRegisterFormUsername" class="form-control">
+                    <label for="materialRegisterFormUsername">Username</label>
+                </div>
+                <!-- Password -->
+                <div class="md-form">
+                    <input type="password" id="materialRegisterFormPassword" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                    <label for="materialRegisterFormPassword">Password</label>                    
+                </div>
+                <div class="md-form">
+                    <input type="password" id="materialRegisterFormPasswordCheck" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                    <label for="materialRegisterFormPasswordCheck">Check Password</label>
+                    <small id="materialRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+                        At least 8 characters
+                    </small>
+                </div>
+                <!-- Sign up button -->
+                <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">
+                    Sign up
+                </button>
+                <!-- Register -->
+                <p>
+                    Already a member?
+                    <a href="">Login</a>
+                </p>
+                <!-- Social register -->
+                <p>or sign up with:</p>
+                <a type="button" class="btn-floating btn-fb btn-sm">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a type="button" class="btn-floating btn-tw btn-sm">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a type="button" class="btn-floating btn-li btn-sm">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a type="button" class="btn-floating btn-git btn-sm">
+                    <i class="fab fa-github"></i>
+                </a>
+            </form>
+            <!-- Form -->
+        </div>
+    </div>
+    <!-- Material form register -->
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" src="{% static "js/popper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/mdb.min.js" %}"></script>
+
+    <script>
+      const loginForm = $("#login-form");
+      const registerForm=$("#register-form");
+
+      loginForm.on("submit", function(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const loginData = {
+          csrfmiddlewaretoken: form.csrfmiddlewaretoken.value,
+          username: form.materialLoginFormUsername.value,
+          password: form.materialLoginFormPassword.value
+        };
+
+        $.ajax("/rest-auth/login/", {
+          type: "POST",
+          data: loginData
+        })
+          .done(function(res, statusText, xhr) {
+            console.log("Login success!");
+            localStorage.setItem("token",res.key);
+          })
+          .fail(function(xhr, statusText) { // 에러처리 하기
+            console.log("Login failure!");
+          });
+      });
+
+      registerForm.on("submit", function(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const loginData = {
+          csrfmiddlewaretoken: form.csrfmiddlewaretoken.value,
+          username: form.materialRegisterFormUsername.value,
+          password1: form.materialRegisterFormPassword.value,
+          password2: form.materialRegisterFormPasswordCheck.value
+        };
+
+        $.ajax("/rest-auth/registration/", {
+          type: "POST",
+          data: loginData
+        })
+          .done(function(res, statusText, xhr) {
+            console.log("register success!");
+            localStorage.setItem("token",res.key);
+          })
+          .fail(function(xhr, statusText) {
+            console.log(xhr.responseJSON); // 에러처리 하기
+            console.log("register failure!");
+            console.log(statusText);
+          });
+      });
+    </script>
+  </body>
+</html>

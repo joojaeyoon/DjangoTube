@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 
-from video.views import index, video
+from video.views import index, video, login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,6 +18,7 @@ urlpatterns = [
     path("", index, name="index"),
     path('api/', include('video.api.urls')),
     path("videos/<slug>", video, name="video-view"),
+    path("login/", login)
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

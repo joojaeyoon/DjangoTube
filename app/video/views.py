@@ -21,3 +21,8 @@ def video(request, slug):
     context["video"].save()
 
     return render(request, 'video.html', context)
+
+
+def login(request):
+
+    return render(request, 'login.html')

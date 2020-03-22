@@ -1,0 +1,14 @@
+body {
+  background-color: white !important;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  min-width: 350px;
+  width: 25%;
+  max-width: 30%;
+  height: 550px;
+}
