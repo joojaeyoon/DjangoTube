@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from video.models import Comment, Video
 
 from .pagination import CommentPagination, VideoPagination
-from .serializers import (CommentCreateSerializer, CommentSerializer,
+from .serializers import (CommentCreateSerializer, CommentListSerializer,
                           VideoDetailSerializer, VideoSerializer)
 
 
@@ -78,14 +78,14 @@ class VideoRetrieveAPIView(generics.RetrieveAPIView):
 class CommentListAPIView(generics.ListAPIView):
     """ 댓글 리스트 API """
 
-    queryset = Comment.objects.order_by("created_at")
-    serializer_class = CommentSerializer
+    queryset = Comment.objects.order_by("-created_at")
+    serializer_class = CommentListSerializer
     pagination_class = CommentPagination
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
     def list(self, request, *args, **kwargs):
         self.queryset = Comment.objects.filter(
-            video=kwargs.get("pk")).order_by("created_at")
+            video=kwargs.get("pk")).order_by("-created_at")
         return super().list(request, *args, **kwargs)
 
 
@@ -113,4 +113,10 @@ class CommentCreateAPIView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(data)
 
-        return Response(serializer.data, status=201, headers=headers)
+        serializer.data["author"] = user.username
+
+        res = serializer.data.copy()
+
+        res["author"] = user.username
+
+        return Response(res, status=201, headers=headers)

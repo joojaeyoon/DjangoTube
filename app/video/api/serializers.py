@@ -17,17 +17,13 @@ class VideoDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CommentSerializer(serializers.ModelSerializer):
-
-    author = serializers.StringRelatedField()
-
-    class Meta:
-        model = Comment
-        fields = "__all__"
-
-
 class CommentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
         fields = "__all__"
+
+
+class CommentListSerializer(CommentCreateSerializer):
+
+    author = serializers.StringRelatedField()

@@ -14,7 +14,7 @@
 
 .video-detail {
   padding-top: 60px;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 .video-info {
@@ -79,7 +79,18 @@
 .comment-author {
   font-size: 20px;
 }
+.comment-time {
+  font-size: 12px;
+}
 .comment-text {
   margin-top: 5px;
   font-size: 22px;
+}
+
+.comment-submit {
+  right: 0;
+  position: absolute;
+  border-radius: 10px;
+  background-color: #2ecc71;
+  color: white;
 }

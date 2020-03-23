@@ -47,11 +47,11 @@
       </div>
       <div class="comment-container">
         <div class="comment-overall"></div>
-        <div class="md-form">
-          <input type="text" id="form1" class="form-control">
+        <form id="comment-form" class="md-form">
+          <input type="text" id="form1" name="commentFormText" class="form-control">
           <label for="form1">댓글 작성</label>
-          <input type="submit" value="댓글"/>
-        </div>
+          <input class="comment-submit" type="submit" value="댓글"/>
+        </form>
         <div class="comment-content"></div>
       </div>
     </div>
@@ -64,35 +64,76 @@
     <script type="text/javascript" src="{% static "js/popper.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/mdb.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/rendertime.js" %}"></script>
     <script>
       let date="{{video.created_at}}"
+      const comments = $(".comment-content");
+
       date=date.split(",")
       date=date[1]+" "+date[0]
 
       $(".video-date").text(date);
-      
-      $.get("/api/videos/{{video.id}}/comments", function(data) {
-        $(".comment-overall").text("댓글 " + data.count + "개");
-        const comments = $(".comment-content");
 
-        data.results.map(comment => {
-          const icon = $("<div class='comment-icon'></div>");
-          const time= $("<span></span>").text(comment.created_at);
-          const author = $("<span class='comment-author'></span>").text(
-            comment.author
-          );
-          const text = $("<span class='comment-text'></span>").text(
-            comment.text
-          );
-          const info = $("<div class='comment-info'></div>")
-            .append(author)
-            .append(text);
-          const commentDiv = $("<div class='comment'></div>")
-            .append(icon)
-            .append(info);
+      function appendComment(comment,appendFirst){
+        const icon = $("<div class='comment-icon'></div>");
+        const time= $("<span class='comment-time'></span>").text(" "+renderTimestamp(comment.created_at));
+        const author = $("<span class='comment-author'></span>").text(
+          comment.author
+        ).append(time);
+        const text = $("<span class='comment-text'></span>").text(
+          comment.text
+        );
+        const info = $("<div class='comment-info'></div>")
+          .append(author)
+          .append(text);
+        const commentDiv = $("<div class='comment'></div>")
+          .append(icon)
+          .append(info);
+
+        if(appendFirst){
+          comments.prepend(commentDiv);
+        }else{
           comments.append(commentDiv);
+        }
+      }      
+
+      function getComments(){
+          $.get("/api/videos/{{video.id}}/comments", function(data) {
+          $(".comment-overall").text("댓글 " + data.count + "개");
+
+          data.results.map(comment=>{
+            appendComment(comment,false)
+          });
         });
-      });
+      }
+
+      getComments();
+
+      $("#comment-form").on("submit",function(e){
+        e.preventDefault();
+        const text=e.target.commentFormText.value;
+
+        if(text==="") return;
+
+        const data={
+          token:localStorage.getItem("token"),
+          text:e.target.commentFormText.value
+        }
+
+        $.ajax("/api/videos/{{video.id}}/comment",{
+          method:"POST",
+          data:data
+        }).done(function(res,statusText,xhr){
+          appendComment(res,true);
+
+          const count=Number($(".comment-overall").text().match(/\d/g).join("")) + 1;
+
+          $(".comment-overall").text("댓글 " + count + "개");
+        })
+
+        e.target.commentFormText.value="";
+      })     
+     
     </script>
   </body>
 </html>
