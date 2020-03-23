@@ -1,31 +1,39 @@
+import uuid
+
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, views, mixins
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import generics, mixins, views
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
 
 from video.models import Comment, Video
 
 from .pagination import CommentPagination, VideoPagination
-from .serializers import (CommentSerializer, VideoDetailSerializer,
-                          VideoSerializer)
-
-import uuid
+from .serializers import (CommentCreateSerializer, CommentSerializer,
+                          VideoDetailSerializer, VideoSerializer)
 
 
 class VideoUploadAPIView(views.APIView):
     """ 비디오 파일 업로드 API """
+
     permission_classes = [IsAuthenticated, ]
 
     def post(self, request, *args, **kwargs):
 
         upload_file = request.data["video"]
 
-        filename = str(upload_file).split(".")
-        ext = filename[-1]
+        content_type = upload_file.content_type.split("/")[0]
 
-        if ext not in ["mp4", "avi"]:
-            return JsonResponse({"error": "BAD REQUEST"}, status=400)
+        if content_type != "video":
+            return JsonResponse({"error": "invalid content type."}, status=400)
+        if upload_file.size > 41943040:  # 40 MB 초과
+            return JsonResponse({"error": "The uploaded file is larger than the limited size."}, status=400)
+
+        filename = upload_file.name.split(".")
+        ext = filename[-1]
 
         filename = ".".join(filename[:-1])
         filename = filename+"-"+str(uuid.uuid4())+"."+ext
@@ -36,7 +44,7 @@ class VideoUploadAPIView(views.APIView):
             destination.write(chunk)
         destination.close()
 
-        response = {"data": "Some data"}
+        response = {"filepath": filename}
 
         return JsonResponse(response, status=200)
 
@@ -79,3 +87,30 @@ class CommentListAPIView(generics.ListAPIView):
         self.queryset = Comment.objects.filter(
             video=kwargs.get("pk")).order_by("created_at")
         return super().list(request, *args, **kwargs)
+
+
+class CommentCreateAPIView(generics.CreateAPIView):
+    """ 댓글 작성 API """
+
+    queryset = Comment.objects.all()
+    serializer_class = CommentCreateSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def create(self, request, *args, **kwargs):
+        video_id = kwargs.get("pk")
+        token = request.data.get("token")
+
+        user = Token.objects.filter(key=token)[0].user
+
+        data = request.data.copy()
+
+        data["video"] = video_id
+        data["author"] = user.id
+        data.pop("token")
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(data)
+
+        return Response(serializer.data, status=201, headers=headers)

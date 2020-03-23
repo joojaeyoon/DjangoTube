@@ -59,11 +59,10 @@ class TestAuthorizedComment(APITestCase):
     def test_post_comment(self):
         """ 댓글 작성 API 테스트 """
 
-        url = reverse("api:comment-create")
+        url = reverse("api:comment-create", kwargs={"pk": self.video.id})
 
         payload = {
             "token": self.token,
-            "video": self.video,
             "text": "test comment",
         }
 
