@@ -32,29 +32,30 @@
         </form>
       </div>
     </nav>
-    <div class="video-detail">
-      <div class="player-container">
-        <video class="player" controls>
-          <source src="{{video.video_link}}" />
-        </video>
-      </div>
-      <div class="video-info">
-        <div class="video-title">{{video.title}} </div>
-        <div class="video-view">조회수 {{video.view_count}}회 <span class="video-date"></span></div>
-      </div>
-      <div class="video-author">
-        {{video.author}}
+      <div class="video-detail">
+        <div class="player-container">
+          <video class="player" controls>
+            <source src="{{video.video_link}}" />
+          </video>
+        </div>
+        <div class="video-info">
+          <div class="video-title">{{video.title}} </div>
+          <div class="video-view">조회수 {{video.view_count}}회 <span class="video-date"></span></div>
+        </div>
+        <div class="video-author">
+          {{video.author}}
+        </div>      
       </div>
       <div class="comment-container">
         <div class="comment-overall"></div>
         <form id="comment-form" class="md-form">
-          <input type="text" id="form1" name="commentFormText" class="form-control">
+          {% csrf_token %}
+          <input type="text" id="form1" name="commentFormText" autocomplete="off" class="form-control">
           <label for="form1">댓글 작성</label>
           <input class="comment-submit" type="submit" value="댓글"/>
         </form>
         <div class="comment-content"></div>
       </div>
-    </div>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -66,8 +67,13 @@
     <script type="text/javascript" src="{% static "js/mdb.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/rendertime.js" %}"></script>
     <script>
-      let date="{{video.created_at}}"
       const comments = $(".comment-content");
+
+      let commentData={
+        next:"/api/videos/{{video.id}}/comments"
+      };
+
+      let date="{{video.created_at}}"
 
       date=date.split(",")
       date=date[1]+" "+date[0]
@@ -95,19 +101,17 @@
         }else{
           comments.append(commentDiv);
         }
-      }      
-
-      function getComments(){
-          $.get("/api/videos/{{video.id}}/comments", function(data) {
-          $(".comment-overall").text("댓글 " + data.count + "개");
-
-          data.results.map(comment=>{
-            appendComment(comment,false)
-          });
-        });
       }
 
-      getComments();
+      function getComments(res){
+        commentData=res;
+        $(".comment-overall").text("댓글 " + res.count + "개");
+
+        res.results.map(comment=>{
+          appendComment(comment,false)
+        });
+      }
+      $.get("/api/videos/{{video.id}}/comments",getComments);
 
       $("#comment-form").on("submit",function(e){
         e.preventDefault();
@@ -117,7 +121,8 @@
 
         const data={
           token:localStorage.getItem("token"),
-          text:e.target.commentFormText.value
+          text:e.target.commentFormText.value,
+          csrfmiddlewaretoken:e.target.csrfmiddlewaretoken.value
         }
 
         $.ajax("/api/videos/{{video.id}}/comment",{
@@ -129,11 +134,21 @@
           const count=Number($(".comment-overall").text().match(/\d/g).join("")) + 1;
 
           $(".comment-overall").text("댓글 " + count + "개");
+        }).fail(function(xhr,statusText){
+          // console.log(xhr);
         })
 
         e.target.commentFormText.value="";
-      })     
-     
+      })
+
+      $(window).on("scroll",function(){
+        const scrollTop=$("html").scrollTop();
+        const scrollTopMax=$("html").prop("scrollTopMax");
+
+        if (scrollTop == scrollTopMax && commentData.next !== null) {
+          $.get(commentData.next, getComments);
+        }
+      });
     </script>
   </body>
 </html>

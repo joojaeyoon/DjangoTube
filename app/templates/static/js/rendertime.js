@@ -16,5 +16,3 @@ const renderTimestamp = timestamp => {
   }
   return prefix;
 };
-
-console.log("render");

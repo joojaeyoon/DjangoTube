@@ -43,11 +43,13 @@ function getVideos(res) {
 
 $.get("/api/videos", getVideos);
 
-videoList.on("scroll", () => {
-  const max = videoList.prop("scrollTopMax") * 0.8;
-  const scrollPos = videoList.scrollTop();
+function CheckScroll() {
+  const scrollTopMax = videoList.prop("scrollTopMax");
+  const scrollTop = videoList.scrollTop();
 
-  if (max <= scrollPos && data.next !== null) {
+  if (scrollTop == scrollTopMax && data.next !== null) {
     $.get(data.next, getVideos);
   }
-});
+}
+
+videoList.on("scroll", CheckScroll);
