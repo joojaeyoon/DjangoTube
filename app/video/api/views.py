@@ -1,4 +1,5 @@
 import uuid
+import os
 
 from django.conf import settings
 from django.http import JsonResponse
@@ -47,6 +48,40 @@ class VideoUploadAPIView(views.APIView):
         response = {"filepath": filename}
 
         return JsonResponse(response, status=200)
+
+
+class VideoCreateAPIView(generics.CreateAPIView):
+    """ 비디오 생성 API """
+
+    queryset = Video.objects.all()
+    serializer_class = VideoDetailSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def create(self, request, *args, **kwargs):
+        token = request.data.get("token")
+
+        user = Token.objects.filter(key=token)[0].user
+
+        data = request.data.copy()
+
+        data["author"] = user.id
+        data["video_link"] = os.path.join(
+            settings.MEDIA_ROOT, "videos", data["video_link"])
+
+        data.pop("token")
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(data)
+
+        serializer.data["author"] = user.username
+
+        res = serializer.data.copy()
+
+        res["author"] = user.username
+
+        return Response(res, status=201, headers=headers)
 
 
 class VideoListAPIView(generics.ListAPIView):
