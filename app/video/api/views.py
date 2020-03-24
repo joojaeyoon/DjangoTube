@@ -86,6 +86,11 @@ class CommentListAPIView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         self.queryset = Comment.objects.filter(
             video=kwargs.get("pk")).order_by("-created_at")
+
+        self.paginate_queryset(self.queryset)
+
+        self.response = self.get_paginated_response(self.queryset)
+
         return super().list(request, *args, **kwargs)
 
 
