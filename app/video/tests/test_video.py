@@ -2,11 +2,12 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework.authtoken.models import Token
 
 from video.models import Comment, Video
 
 
-class TestVideo(APITestCase):
+class TestUnAuthorizedVideo(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
@@ -54,3 +55,44 @@ class TestVideo(APITestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(prev_count+1, count)
+
+
+class TestAuthorizedVideo(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
+
+        self.token = Token.objects.create(user=self.user)
+
+        self.client.force_authenticate(user=self.user)
+
+    def test_create_video(self):
+        """ 비디오 생성 API 테스트 """
+
+        url = reverse("api:video-create")
+
+        payload = {
+            "token": self.token,
+            "title": "test video",
+            "video_link": "1.mp4"
+        }
+
+        res = self.client.post(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(res.data.get("title"), payload["title"])
+
+    def test_create_invalid_video(self):
+        """ 유효하지 않은 비디오 생성 테스트 """
+
+        url = reverse("api:video-create")
+
+        payload = {
+            "token": self.token,
+            "video_link": "test.mp4"
+        }
+
+        res = self.client.post(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
