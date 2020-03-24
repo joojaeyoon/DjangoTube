@@ -29,8 +29,54 @@
           </div>
         </form>
       </div>
+      <!-- Button trigger modal -->
+      <button type="button" id="uploadButton" class="login" data-toggle="modal" data-target="#uploadModal">
+        Upload
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">비디오 업로드</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="modalForm" class="md-form">
+                {% csrf_token %}
+                <div class="md-form mt-3">
+                  <input type="text" id="uploadTitle" name="title" class="form-control form-input">
+                  <label for="uploadTitle">제목 (필수)</label>
+                </div>
+                <div class="md-form mt-3">
+                  <input type="text" id="uploadDescription" name="description" class="form-control form-input">
+                  <label for="uploadDescription">설명</label>
+                </div>
+                <div class="file-field">
+                  <div class="btn btn-primary btn-sm float-left">
+                    <span>Choose File</span>
+                    <input id="modalUploadInput" name="video" type="file">
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" id="modalUploadInputText" type="text" placeholder="Upload your file" readonly>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-success" id="modalUploadButton">Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <a href="/login" id="Login-button" class="login">Login</a>
-    
     </nav>
     <div class="container">
       <div class="Menu">

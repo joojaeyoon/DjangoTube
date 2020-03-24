@@ -5,6 +5,8 @@ let data = null;
 
 if (localStorage.getItem("token") !== null) {
   loginButton.text("Logout");
+} else {
+  $("#uploadButton").hide();
 }
 
 loginButton.on("click", function() {
@@ -53,3 +55,39 @@ function CheckScroll() {
 }
 
 videoList.on("scroll", CheckScroll);
+
+$("#modalUploadInput").on("change", function(e) {
+  filepath = e.target.value.split("\\");
+
+  filename = filepath[filepath.length - 1];
+
+  $("#modalUploadInputText").attr("placeholder", filename);
+});
+
+$("#modalUploadButton").on("click", function() {
+  const form = $("#modalForm")[0];
+  if (form.video.value === "") {
+    return;
+  }
+
+  const formData = new FormData(form);
+
+  const data = {
+    csrfmiddlewaretoken: form.csrfmiddlewaretoken.value,
+    title: form.title.value,
+    description: form.description.value
+  };
+
+  $.ajax("/api/video/upload", {
+    method: "POST",
+    data: formData,
+    processData: false,
+    contentType: false
+  })
+    .done(function(res, statusText, xhr) {
+      data.video = res.filepath;
+    })
+    .fail(function(xhr, statusText) {
+      console.log(xhr);
+    });
+});
