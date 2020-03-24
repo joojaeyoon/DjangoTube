@@ -155,3 +155,8 @@ body {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
     -webkit-box-shadow 0.15s ease-in-out;
 }
+
+.file-ph-red::placeholder {
+  color: #e74c3c;
+  opacity: 1;
+}

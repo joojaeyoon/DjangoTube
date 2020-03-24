@@ -66,17 +66,25 @@ $("#modalUploadInput").on("change", function(e) {
 
 $("#modalUploadButton").on("click", function() {
   const form = $("#modalForm")[0];
-  if (form.video.value === "") {
-    return;
-  }
 
   const formData = new FormData(form);
 
   const data = {
     csrfmiddlewaretoken: form.csrfmiddlewaretoken.value,
     title: form.title.value,
-    description: form.description.value
+    description: form.description.value,
+    token: localStorage.getItem("token")
   };
+
+  if (data.title === "") {
+    $("#uploadTitleLabel").css("color", "#e74c3c");
+    return;
+  }
+
+  if (form.video.value === "") {
+    $("#modalUploadInputText").addClass("file-ph-red");
+    return;
+  }
 
   $.ajax("/api/video/upload", {
     method: "POST",
@@ -85,7 +93,20 @@ $("#modalUploadButton").on("click", function() {
     contentType: false
   })
     .done(function(res, statusText, xhr) {
-      data.video = res.filepath;
+      data.video_link = res.filepath;
+
+      $.ajax("/api/videos/", {
+        method: "POST",
+        data: data
+      })
+        .done(function(res, statusText, xhr) {
+          console.log(res);
+          alert("업로드 되었습니다.");
+          window.location.href = "/";
+        })
+        .fail(function(xhr, statusText) {
+          console.log(xhr);
+        });
     })
     .fail(function(xhr, statusText) {
       console.log(xhr);
