@@ -50,12 +50,13 @@ class VideoUploadAPIView(views.APIView):
         return JsonResponse(response, status=200)
 
 
-class VideoCreateAPIView(generics.CreateAPIView):
-    """ 비디오 생성 API """
+class VideoListCreateAPIView(generics.ListCreateAPIView):
+    """ 비디오 리스트 API """
 
-    queryset = Video.objects.all()
-    serializer_class = VideoDetailSerializer
-    permission_classes = [IsAuthenticated, ]
+    queryset = Video.objects.order_by("-created_at")
+    serializer_class = VideoSerializer
+    pagination_class = VideoPagination
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
 
     def create(self, request, *args, **kwargs):
         token = request.data.get("token")
@@ -70,6 +71,8 @@ class VideoCreateAPIView(generics.CreateAPIView):
 
         data.pop("token")
 
+        self.serializer_class = VideoDetailSerializer
+
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -82,15 +85,6 @@ class VideoCreateAPIView(generics.CreateAPIView):
         res["author"] = user.username
 
         return Response(res, status=201, headers=headers)
-
-
-class VideoListAPIView(generics.ListAPIView):
-    """ 비디오 리스트 API """
-
-    queryset = Video.objects.order_by("-created_at")
-    serializer_class = VideoSerializer
-    pagination_class = VideoPagination
-    permission_classes = [IsAuthenticatedOrReadOnly, ]
 
 
 class VideoRetrieveAPIView(generics.RetrieveAPIView):

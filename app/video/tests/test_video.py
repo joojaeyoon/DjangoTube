@@ -70,7 +70,7 @@ class TestAuthorizedVideo(APITestCase):
     def test_create_video(self):
         """ 비디오 생성 API 테스트 """
 
-        url = reverse("api:video-create")
+        url = reverse("api:video-list")
 
         payload = {
             "token": self.token,
@@ -86,7 +86,7 @@ class TestAuthorizedVideo(APITestCase):
     def test_create_invalid_video(self):
         """ 유효하지 않은 비디오 생성 테스트 """
 
-        url = reverse("api:video-create")
+        url = reverse("api:video-list")
 
         payload = {
             "token": self.token,
