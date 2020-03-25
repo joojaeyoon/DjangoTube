@@ -68,6 +68,14 @@ body {
   display: inline-block;
 }
 
+.video-info {
+  line-height: 0.5;
+}
+
+.video-title {
+  margin-top: 10px;
+}
+
 .video_time {
   position: absolute;
   z-index: 999;
@@ -79,7 +87,14 @@ body {
   font-family: Arial, sans-serif;
   color: #fff;
   width: 15%;
-  height: 10%;
+  height: 25px;
+  line-height: 1.5;
+}
+
+.video-uptime {
+  margin-left: 5px;
+  font-size: 14px;
+  color: #4d4d4d;
 }
 
 .login {

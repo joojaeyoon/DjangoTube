@@ -21,6 +21,8 @@
   margin-left: 3rem;
   border-bottom: 1px #cfcfcf solid;
   margin-right: 3rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .video-title {
@@ -41,6 +43,21 @@
 .video-author {
   margin-left: 3rem;
   margin-top: 20px;
+}
+
+.owner-panel {
+  margin-left: auto;
+  display: none;
+}
+
+.video-del {
+  color: #e74c3c;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+.video-del:focus {
+  outline: none;
 }
 
 .comment-container {

@@ -110,6 +110,8 @@ class VideoRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
         """ 비디오 삭제 """
         token = request.data.get("token")
 
+        self.perform_authentication(request)
+
         if token == None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

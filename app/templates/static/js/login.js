@@ -18,6 +18,7 @@ loginForm.on("submit", function(e) {
     .done(function(res, statusText, xhr) {
       console.log("Login success!");
       localStorage.setItem("token", res.key);
+      localStorage.setItem("username", loginData.username);
       window.location.href = "/";
     })
     .fail(function(xhr, statusText) {
@@ -44,6 +45,7 @@ registerForm.on("submit", function(e) {
     .done(function(res, statusText, xhr) {
       console.log("register success!");
       localStorage.setItem("token", res.key);
+      localStorage.setItem("username", loginData.username);
       window.location.href = "/";
     })
     .fail(function(xhr, statusText) {

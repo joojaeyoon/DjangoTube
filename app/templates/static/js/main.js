@@ -20,12 +20,19 @@ function getVideos(res) {
   data = res;
   res.results.map(video => {
     const li = $("<li></li>");
-    const videoDiv = $("<div></div>");
+    const videoDiv = $("<div class='video-info'></div>");
     const vidoe_link = $("<a></a>");
     const videoThumbnail = $("<img/>");
     const time = $("<span></span>").text(video.time);
-    const title = $("<p></p>").text(video.title);
-    const views = $("<p></p>").text("조회수 " + video.view_count);
+    const title = $("<p class='video-title'></p>").text(video.title);
+    const user = $("<p></p>").text(video.author);
+    const views = $("<p></p>")
+      .text("조회수 " + video.view_count)
+      .append(
+        $("<span class='video-uptime'></span>").text(
+          " " + renderTimestamp(video.created_at)
+        )
+      );
 
     vidoe_link.attr("href", "/videos/" + video.slug);
     vidoe_link.addClass("video_box");
@@ -37,6 +44,7 @@ function getVideos(res) {
     videoDiv
       .append(vidoe_link)
       .append(title)
+      .append(user)
       .append(views);
     li.append(videoDiv);
     videoList.append(li);
@@ -44,6 +52,7 @@ function getVideos(res) {
 }
 
 $.get("/api/videos", getVideos);
+$.get("/api/videos/?page=2", getVideos);
 
 function CheckScroll() {
   const scrollTopMax = videoList.prop("scrollTopMax");

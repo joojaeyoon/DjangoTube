@@ -9,6 +9,10 @@ let date = video_date;
 date = date.split(",");
 date = date[1] + " " + date[0];
 
+if (localStorage.getItem("username") === video_author) {
+  $(".owner-panel").show();
+}
+
 $(".video-date").text(date);
 
 function appendComment(comment, appendFirst) {
@@ -92,3 +96,23 @@ $(window).on("scroll", function() {
 if (localStorage.getItem("token") === null) {
   $("#comment-form").hide();
 }
+
+$("#delete-button").on("click", function() {
+  data = {
+    token: localStorage.getItem("token"),
+    csrfmiddlewaretoken: $("#token-form")[0].csrfmiddlewaretoken.value
+  };
+
+  $.ajax(`/api/videos/${video_id}`, {
+    method: "DELETE",
+    data: data
+  })
+    .done(function(res, statusText, xhr) {
+      // console.log(xhr.status);
+      alert("삭제되었습니다.");
+      window.location.href = "/";
+    })
+    .fail(function(xhr, statusText) {
+      console.log(xhr.responseJSON);
+    });
+});

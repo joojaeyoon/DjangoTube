@@ -10,11 +10,11 @@
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
     />
-    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" /> 
-    <link rel="stylesheet" href="{% static "css/mdb.min.css" %}" /> 
-    <link rel="stylesheet"  href="{% static "css/style.css" %}" /> 
-    <!-- <link rel="stylesheet" href="{% static "css/video.css" %}" /> -->
-    <link rel="stylesheet" href="/static/css/video.css"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <!-- <link rel="stylesheet" href="{% static 'css/video.css' %}" /> -->
+    <link rel="stylesheet" href="/static/css/video.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark teal lighten-2">
@@ -32,44 +32,124 @@
         </form>
       </div>
     </nav>
-      <div class="video-detail">
-        <div class="player-container">
-          <video class="player" controls>
-            <source src="{{video.video_link}}" />
-          </video>
-        </div>
-        <div class="video-info">
-          <div class="video-title">{{video.title}} </div>
-          <div class="video-view">조회수 {{video.view_count}}회 <span class="video-date"></span></div>
-        </div>
-        <div class="video-author">
-          {{video.author}}
-        </div>      
+    <div class="video-detail">
+      <div class="player-container">
+        <video class="player" controls>
+          <source src="{{video.video_link}}" />
+        </video>
       </div>
-      <div class="comment-container">
-        <div class="comment-overall"></div>
-        <form id="comment-form" class="md-form">
-          {% csrf_token %}
-          <input type="text" id="form1" name="commentFormText" autocomplete="off" class="form-control">
-          <label for="form1">댓글 작성</label>
-          <input class="comment-submit" type="submit" value="댓글"/>
-        </form>
-        <div class="comment-content"></div>
+      <div class="video-info">
+        <div class="video-title">{{video.title}}</div>
+        <div class="video-view">
+          조회수 {{video.view_count}}회 <span class="video-date"></span>
+        </div>
+        <div class="owner-panel">
+          <button
+            id="modalActivate"
+            type="button"
+            class="btn btn-danger"
+            data-toggle="modal"
+            data-target="#exampleModalPreview"
+          >
+            삭제
+          </button>
+          <!-- Modal -->
+          <div
+            class="modal fade right"
+            id="exampleModalPreview"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalPreviewLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalPreviewLabel">
+                    삭제
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="token-form">
+                    {% csrf_token %}
+                  </form>
+                  삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    아니오
+                  </button>
+                  <button
+                    type="button"
+                    id="delete-button"
+                    class="btn btn-danger"
+                  >
+                    네
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal -->
+        </div>
       </div>
+      <div class="video-author">
+        {{video.author}}
+      </div>
+    </div>
+    <div class="comment-container">
+      <div class="comment-overall"></div>
+      <form id="comment-form" class="md-form">
+        {% csrf_token %}
+        <input
+          type="text"
+          id="form1"
+          name="commentFormText"
+          autocomplete="off"
+          class="form-control"
+        />
+        <label for="form1">댓글 작성</label>
+        <input class="comment-submit" type="submit" value="댓글" />
+      </form>
+      <div class="comment-content"></div>
+    </div>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
-    <script type="text/javascript" src="{% static "js/popper.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/mdb.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/rendertime.js" %}"></script>
+    <script
+      type="text/javascript"
+      src="{% static 'js/popper.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'js/bootstrap.min.js' %}"
+    ></script>
+    <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+    <script
+      type="text/javascript"
+      src="{% static 'js/rendertime.js' %}"
+    ></script>
     <script>
-      video_id="{{video.id}}"
-      video_date="{{video.date}}"
+      video_id = "{{video.id}}";
+      video_date = "{{video.created_at}}";
+      video_author = "{{video.author}}";
     </script>
-    <script type="text/javascript" src="{% static "js/video.js" %}"></script>
+    <!-- <script type="text/javascript" src="{% static "js/video.js" %}"></script> -->
+    <script src="/static/js/video.js"></script>
   </body>
 </html>
