@@ -4,7 +4,7 @@ import os
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, mixins, views, status
+from rest_framework import generics, mixins, views, status,filters
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
@@ -57,6 +57,8 @@ class VideoListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = VideoSerializer
     pagination_class = VideoPagination
     permission_classes = [IsAuthenticatedOrReadOnly, ]
+    filter_backends=[filters.SearchFilter]
+    search_fields=['title']
 
     def create(self, request, *args, **kwargs):
         token = request.data.get("token")

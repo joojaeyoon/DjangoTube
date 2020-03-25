@@ -56,6 +56,20 @@ class TestUnAuthorizedVideo(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(prev_count+1, count)
 
+    def test_video_search(self):
+        """ 비디오 검색 테스트 """
+
+        video = Video.objects.create(
+            author=self.user,
+            title="search video",
+            video_link="media/test.mp4"
+        )
+
+        res = self.client.get("/api/videos/?search=search")
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data.get("count"), 1)
+
 
 class TestAuthorizedVideo(APITestCase):
 
