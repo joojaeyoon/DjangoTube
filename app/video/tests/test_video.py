@@ -96,3 +96,43 @@ class TestAuthorizedVideo(APITestCase):
         res = self.client.post(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_video(self):
+        """ 비디오 삭제 API 테스트 """
+
+        video = Video.objects.create(
+            author=self.user,
+            title="test title",
+            video_link="test.mp4"
+        )
+
+        url = reverse("api:video-detail", kwargs={"pk": video.id})
+
+        payload = {
+            "token": self.token
+        }
+
+        res = self.client.delete(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_update_video(self):
+        """ 비디오 수정 API 테스트 """
+
+        video = Video.objects.create(
+            author=self.user,
+            title="test title",
+            video_link="test.mp4"
+        )
+
+        url = reverse("api:video-detail", kwargs={"pk": video.id})
+
+        payload = {
+            "token": self.token,
+            "title": "Title Changed"
+        }
+
+        res = self.client.put(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data.get("title"), payload.title)

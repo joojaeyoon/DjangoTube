@@ -5,6 +5,8 @@ from video.models import Video, Comment
 
 class VideoSerializer(serializers.ModelSerializer):
 
+    author = serializers.StringRelatedField()
+
     class Meta:
         model = Video
         exclude = ["description", "video_link", "updated_at"]
