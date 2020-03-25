@@ -103,7 +103,7 @@ class TestAuthorizedVideo(APITestCase):
         video = Video.objects.create(
             author=self.user,
             title="test title",
-            video_link="test.mp4"
+            video_link="media/test.mp4"
         )
 
         url = reverse("api:video-detail", kwargs={"pk": video.id})
@@ -122,7 +122,7 @@ class TestAuthorizedVideo(APITestCase):
         video = Video.objects.create(
             author=self.user,
             title="test title",
-            video_link="test.mp4"
+            video_link="media/test.mp4"
         )
 
         url = reverse("api:video-detail", kwargs={"pk": video.id})
@@ -132,7 +132,7 @@ class TestAuthorizedVideo(APITestCase):
             "title": "Title Changed"
         }
 
-        res = self.client.put(url, payload)
+        res = self.client.patch(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data.get("title"), payload.title)
+        self.assertEqual(res.data.get("title"), payload["title"])

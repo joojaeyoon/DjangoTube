@@ -4,7 +4,7 @@ import os
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, mixins, views
+from rest_framework import generics, mixins, views, status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
@@ -61,6 +61,9 @@ class VideoListCreateAPIView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         token = request.data.get("token")
 
+        if token == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         user = Token.objects.filter(key=token)[0].user
 
         data = request.data.copy()
@@ -87,7 +90,7 @@ class VideoListCreateAPIView(generics.ListCreateAPIView):
         return Response(res, status=201, headers=headers)
 
 
-class VideoRetrieveAPIView(generics.RetrieveAPIView):
+class VideoRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     """ 비디오 디테일 API """
 
     queryset = Video.objects.all()
@@ -102,6 +105,37 @@ class VideoRetrieveAPIView(generics.RetrieveAPIView):
         video.save()
 
         return video
+
+    def delete(self, request, *args, **kwargs):
+        """ 비디오 삭제 """
+        token = request.data.get("token")
+
+        if token == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        user = Token.objects.filter(key=token)[0].user
+        video = Video.objects.filter(pk=kwargs.get("pk"))[0]
+
+        if video.author == user:
+            video.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, *args, **kwargs):
+        """ 비디오 정보 업데이트 """
+        token = request.data.get("token")
+
+        if token == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        user = Token.objects.filter(key=token)[0].user
+        video = Video.objects.filter(pk=kwargs.get("pk"))[0]
+
+        if video.author == user:
+            return super().patch(request, *args, **kwargs)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentListAPIView(generics.ListAPIView):
@@ -133,6 +167,9 @@ class CommentCreateAPIView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         video_id = kwargs.get("pk")
         token = request.data.get("token")
+
+        if token == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         user = Token.objects.filter(key=token)[0].user
 
