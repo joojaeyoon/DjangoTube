@@ -23,9 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dbqc-=t_w+o2&vtpd!-ig2q1$wh@y%%igi5nt_iu@h=m4kzw+i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = (os.environ.get("DEBUG", default="True"))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+# os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition

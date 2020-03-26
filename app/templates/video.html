@@ -12,9 +12,8 @@
     />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <!-- <link rel="stylesheet" href="{% static 'css/video.css' %}" /> -->
-    <link rel="stylesheet" href="/static/css/video.css" />
+    <link rel="stylesheet" href="{% static 'css/video.css' %}" />
+    <!-- <link rel="stylesheet" href="/static/css/video.css" /> -->
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark teal lighten-2">
@@ -157,7 +156,7 @@
       video_author = "{{video.author}}";
     </script>
     <script src="{% static 'js/csrf_token.js' %}"></script>
-    <!-- <script type="text/javascript" src="{% static "js/video.js" %}"></script> -->
-    <script src="/static/js/video.js"></script>
+    <script type="text/javascript" src="{% static "js/video.js" %}"></script>
+    <!-- <script src="/static/js/video.js"></script> -->
   </body>
 </html>
