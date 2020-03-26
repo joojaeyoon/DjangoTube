@@ -25,8 +25,7 @@ SECRET_KEY = 'dbqc-=t_w+o2&vtpd!-ig2q1$wh@y%%igi5nt_iu@h=m4kzw+i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get("DEBUG", default="True"))
 
-# os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
