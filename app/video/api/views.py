@@ -1,20 +1,21 @@
 import uuid
 import os
 
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, mixins, views, status,filters
+from rest_framework import generics, mixins, views, status, filters
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
-from video.models import Comment, Video
+from video.models import Comment, Video, Profile
 
 from .pagination import CommentPagination, VideoPagination
 from .serializers import (CommentCreateSerializer, CommentListSerializer,
-                          VideoDetailSerializer, VideoSerializer)
+                          VideoDetailSerializer, VideoSerializer, ProfileSerializer)
 
 
 class VideoUploadAPIView(views.APIView):
@@ -57,8 +58,8 @@ class VideoListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = VideoSerializer
     pagination_class = VideoPagination
     permission_classes = [IsAuthenticatedOrReadOnly, ]
-    filter_backends=[filters.SearchFilter]
-    search_fields=['title']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
 
     def create(self, request, *args, **kwargs):
         token = request.data.get("token")
@@ -195,3 +196,54 @@ class CommentCreateAPIView(generics.CreateAPIView):
         res["author"] = user.username
 
         return Response(res, status=201, headers=headers)
+
+
+class ProfileRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get_object(self):
+
+        data = self.request.data
+
+        if self.request.method == "GET":
+            data = self.request.query_params
+
+        user = User.objects.filter(
+            auth_token=data.get("token"))[0]
+
+        if self.request.method == "GET":
+            return user.profile.all()[0]
+
+        return user
+
+    def put(self, request, *args, **kwargs):
+        return Response(status=400)
+
+    def patch(self, request, *args, **kwargs):
+
+        user = self.get_object()
+        profile = user.profile.all()[0]
+
+        data = request.data.copy()
+
+        if data.get("subscribe"):
+            s_user = User.objects.filter(username=data.get("subscribe"))[0]
+            s_profile = user.profile.all()[0]
+
+            if s_user not in profile.subscribed.all():
+                profile.subscribed.add(s_user)
+                s_profile.subscriber.add(user)
+
+            return Response(status=204)
+        elif data.get("unsubscribe"):
+            s_user = User.objects.filter(username=data.get("unsubscribe"))[0]
+            s_profile = user.profile.all()[0]
+
+            if s_user in profile.subscribed.all():
+                profile.subscribed.remove(s_user)
+                s_profile.subscriber.remove(user)
+            return Response(status=204)
+        else:
+            return Response(status=400)
