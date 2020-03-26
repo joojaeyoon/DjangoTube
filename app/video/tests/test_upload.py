@@ -41,19 +41,3 @@ class TestUploadAuthorized(APITestCase):
         res = self.client.post(self.url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
-    def test_upload_invalid_video(self):
-        """ 유효하지 않은 형식의 비디오 업로드 테스트 """
-
-        file = open("media/test.txt", "r")
-
-        payload = {
-            "video": file
-        }
-
-        res = self.client.post(self.url, payload)
-
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_upload_invalid_size_video(self):
-        """ 특정 용량(40MB)보다 큰 비디오 업로드 테스트 """

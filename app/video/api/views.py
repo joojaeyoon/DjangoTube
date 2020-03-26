@@ -27,11 +27,12 @@ class VideoUploadAPIView(views.APIView):
 
         upload_file = request.data["video"]
 
+        if request.FILES["video"]:
+            upload_file = request.FILES["video"]
+
         content_type = upload_file.content_type.split("/")[0]
 
-        if content_type != "video":
-            return JsonResponse({"error": "invalid content type."}, status=400)
-        if upload_file.size > 41943040:  # 40 MB 초과
+        if upload_file.size > 100*1024*1024:  # 100 MB 초과
             return JsonResponse({"error": "The uploaded file is larger than the limited size."}, status=400)
 
         filename = upload_file.name.split(".")

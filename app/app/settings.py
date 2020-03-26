@@ -158,3 +158,6 @@ REST_FRAMEWORK = {
 }
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
