@@ -9,9 +9,10 @@
   background-color: #000;
   text-align: center;
 }
-.player {
-}
 
+.player {
+  height: 100%;
+}
 .video-detail {
   padding-top: 60px;
   /* overflow: auto; */

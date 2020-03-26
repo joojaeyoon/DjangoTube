@@ -3,16 +3,24 @@ const loginButton = $("#Login-button");
 
 let data = null;
 
-if (localStorage.getItem("token") !== null) {
+if (
+  localStorage.getItem("token") !== null &&
+  new Date(localStorage.getItem("expirationDate")) > new Date()
+) {
   loginButton.text("Logout");
 } else {
   $("#uploadButton").hide();
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
+  localStorage.removeItem("expirationDate");
 }
 
 loginButton.on("click", function() {
   if (loginButton.text() === "Logout") {
     loginButton.prop("href", "/");
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("expirationDate");
   }
 });
 
@@ -120,4 +128,19 @@ $("#modalUploadButton").on("click", function() {
     .fail(function(xhr, statusText) {
       console.log(xhr);
     });
+});
+
+$("#searchForm").on("submit", function(e) {
+  e.preventDefault();
+  const searchWord = e.target.search.value;
+
+  $.ajax(`/api/videos/?search=${searchWord}`, {
+    method: "GET"
+  }).done(function(res, statusText, xhr) {
+    console.log(res);
+    videoList.text("");
+    getVideos(res);
+
+    e.target.search.value = "";
+  });
 });

@@ -6,6 +6,19 @@ from django.utils.text import slugify
 from app.utils import generate_random_string, get_video_data
 
 
+class Profile(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="profile")
+
+    subscriber = models.ManyToManyField(
+        User, related_name="subscribed_list")
+    subscribed = models.ManyToManyField(
+        User, related_name="subscriber_list")
+
+    def __str__(self):
+        return self.user.username
+
+
 class Video(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="videos")

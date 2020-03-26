@@ -24,6 +24,7 @@ body {
   margin: 0;
   padding: 0;
   max-width: 100%;
+  background-color: #f9f9f9;
 }
 
 .Menu {
@@ -44,8 +45,6 @@ body {
   min-width: 696px;
   max-width: 85%;
   height: 100vh;
-
-  background-color: #f9f9f9;
 
   overflow: auto;
 }

@@ -16,14 +16,15 @@ loginForm.on("submit", function(e) {
     data: loginData
   })
     .done(function(res, statusText, xhr) {
-      console.log("Login success!");
+      const now = new Date();
+      const expirationDate = new Date(now.getTime() + 4.32e7);
       localStorage.setItem("token", res.key);
       localStorage.setItem("username", loginData.username);
+      localStorage.setItem("expirationDate", expirationDate);
       window.location.href = "/";
     })
     .fail(function(xhr, statusText) {
-      // 에러처리 하기
-      console.log("Login failure!");
+      alert("아이디와 패스워드를 다시 확인해주세요.");
     });
 });
 
@@ -43,15 +44,22 @@ registerForm.on("submit", function(e) {
     data: loginData
   })
     .done(function(res, statusText, xhr) {
-      console.log("register success!");
+      expirationDate = new Date(new Date() + 4.32e7);
       localStorage.setItem("token", res.key);
       localStorage.setItem("username", loginData.username);
+      localStorage.setItem("expirationDate", expirationDate);
       window.location.href = "/";
     })
     .fail(function(xhr, statusText) {
-      console.log(xhr.responseJSON); // 에러처리 하기
-      console.log("register failure!");
-      console.log(statusText);
+      error = xhr.responseJSON;
+
+      console.log(error);
+
+      if (error.username) {
+        alert("동일한 아이디가 이미 존재합니다.");
+      } else {
+        alert("비밀번호를 다시 확인해주세요.");
+      }
     });
 });
 
