@@ -39,7 +39,7 @@ class VideoUploadAPIView(views.APIView):
         ext = filename[-1]
 
         filename = ".".join(filename[:-1])
-        filename = filename+"-"+str(uuid.uuid4())+"."+ext
+        filename = str(uuid.uuid4())+"."+ext
 
         destination = open(settings.MEDIA_ROOT+f"/videos/{filename}", "wb+")
 
