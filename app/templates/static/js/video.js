@@ -4,16 +4,23 @@ let commentData = {
   next: `/api/videos/${video_id}/comments`
 };
 
+const token = localStorage.getItem("token");
 let date = video_date;
 
 date = date.split(",");
 date = date[1] + " " + date[0];
 
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+  }
+});
+
+$(".video-date").text(date);
+
 if (localStorage.getItem("username") === video_author) {
   $(".owner-panel").show();
 }
-
-$(".video-date").text(date);
 
 function appendComment(comment, appendFirst) {
   const icon = $("<div class='comment-icon'></div>");
@@ -55,7 +62,7 @@ $("#comment-form").on("submit", function(e) {
   if (text === "") return;
 
   const data = {
-    token: localStorage.getItem("token"),
+    token: token,
     text: e.target.commentFormText.value,
     csrfmiddlewaretoken: e.target.csrfmiddlewaretoken.value
   };
@@ -93,13 +100,13 @@ $(window).on("scroll", function() {
   }
 });
 
-if (localStorage.getItem("token") === null) {
+if (token === null) {
   $("#comment-form").hide();
 }
 
 $("#delete-button").on("click", function() {
   data = {
-    token: localStorage.getItem("token"),
+    token: token,
     csrfmiddlewaretoken: $("#token-form")[0].csrfmiddlewaretoken.value
   };
 

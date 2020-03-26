@@ -41,9 +41,37 @@
   color: gray;
 }
 
-.video-author {
+.author-info {
   margin-left: 3rem;
   margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  margin-right: 3rem;
+}
+.video-authorImg {
+  width: 30px;
+  height: 30px;
+  background-color: #1abc9c;
+  border-radius: 50%;
+}
+
+.video-author {
+  margin-left: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.video-author div {
+  margin-top: 15px;
+  font-weight: 10;
+}
+
+.subscribe-button {
+  margin-left: auto;
+}
+.unsubscribe-button {
+  margin-left: auto;
+  display: none;
 }
 
 .owner-panel {

@@ -105,11 +105,14 @@
           <!-- Modal -->
         </div>
       </div>
-      <div class="video-author">
-        {{video.author}}
+      <div class="author-info">
+        <div class="video-authorImg"></div>
+        <div class="video-author">
+          {{video.author}}
 
-        <div>
-          {{video.description}}
+          <div>
+            {{video.description}}
+          </div>
         </div>
       </div>
     </div>
@@ -153,6 +156,7 @@
       video_date = "{{video.created_at}}";
       video_author = "{{video.author}}";
     </script>
+    <script src="{% static 'js/csrf_token.js' %}"></script>
     <!-- <script type="text/javascript" src="{% static "js/video.js" %}"></script> -->
     <script src="/static/js/video.js"></script>
   </body>

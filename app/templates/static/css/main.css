@@ -27,11 +27,6 @@ body {
   background-color: #f9f9f9;
 }
 
-.Menu {
-  background-color: #4db6ac !important;
-  width: 15%;
-}
-
 .video_list {
   list-style: none;
   display: flex;
@@ -173,4 +168,32 @@ body {
 .file-ph-red::placeholder {
   color: #e74c3c;
   opacity: 1;
+}
+
+.Menu {
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  padding-top: 15px;
+  background-color: #4db6ac !important;
+  width: 15%;
+}
+
+.subscribe {
+  background-color: #1abc9c;
+  font-size: 24px;
+
+  font-weight: bold;
+  cursor: pointer;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+hr {
+  margin: 5px 0px 5px 0px;
 }

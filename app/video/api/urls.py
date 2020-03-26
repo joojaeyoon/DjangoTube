@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import VideoListCreateAPIView, VideoRetrieveAPIView, CommentListAPIView, VideoUploadAPIView, CommentCreateAPIView, ProfileRetrieveAPIView
+from .views import VideoListCreateAPIView, VideoRetrieveAPIView, CommentListAPIView, VideoUploadAPIView, CommentCreateAPIView
 
 app_name = "api"
 
@@ -11,6 +11,4 @@ urlpatterns = [
          name="comment-create"),
     path("videos/<pk>/comments", CommentListAPIView.as_view(), name="comment-list"),
     path("video/upload", VideoUploadAPIView.as_view(), name="upload-video"),
-    path("profile",
-         ProfileRetrieveAPIView.as_view(), name="profile-detail")
 ]

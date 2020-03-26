@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from video.models import Video, Comment, Profile
+from video.models import Video, Comment
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -29,14 +29,3 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 class CommentListSerializer(CommentCreateSerializer):
 
     author = serializers.StringRelatedField()
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
-
-    # subscriber = serializers.StringRelatedField(many=True)
-    # subscribed = serializers.StringRelatedField(many=True)
-
-    class Meta:
-        model = Profile
-        fields = "__all__"
