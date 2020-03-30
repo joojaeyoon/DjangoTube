@@ -1,4 +1,5 @@
 ### DjangoTube
+[![Build Status](https://travis-ci.org/joojaeyoon/DjangoTube.svg?branch=master)](https://travis-ci.org/joojaeyoon/DjangoTube)
 
 Video streaming service
 
