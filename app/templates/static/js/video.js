@@ -1,7 +1,7 @@
 const comments = $(".comment-content");
 
 let commentData = {
-  next: `/api/videos/${video_id}/comments`
+  next: `/api/videos/${video_id}/comments`,
 };
 
 const token = localStorage.getItem("token");
@@ -11,9 +11,9 @@ date = date.split(",");
 date = date[1] + " " + date[0];
 
 $.ajaxSetup({
-  beforeSend: function(xhr, settings) {
+  beforeSend: function (xhr, settings) {
     xhr.setRequestHeader("X-CSRFToken", csrf_token);
-  }
+  },
 });
 
 $(".video-date").text(date);
@@ -34,9 +34,7 @@ function appendComment(comment, appendFirst) {
   const info = $("<div class='comment-info'></div>")
     .append(author)
     .append(text);
-  const commentDiv = $("<div class='comment'></div>")
-    .append(icon)
-    .append(info);
+  const commentDiv = $("<div class='comment'></div>").append(icon).append(info);
 
   if (appendFirst) {
     comments.prepend(commentDiv);
@@ -49,13 +47,13 @@ function getComments(res) {
   commentData = res;
   $(".comment-overall").text("댓글 " + res.count + "개");
 
-  res.results.map(comment => {
+  res.results.map((comment) => {
     appendComment(comment, false);
   });
 }
 $.get(`/api/videos/${video_id}/comments`, getComments);
 
-$("#comment-form").on("submit", function(e) {
+$("#comment-form").on("submit", function (e) {
   e.preventDefault();
   const text = e.target.commentFormText.value;
 
@@ -64,34 +62,29 @@ $("#comment-form").on("submit", function(e) {
   const data = {
     token: token,
     text: e.target.commentFormText.value,
-    csrfmiddlewaretoken: e.target.csrfmiddlewaretoken.value
+    csrfmiddlewaretoken: e.target.csrfmiddlewaretoken.value,
   };
 
   $.ajax(`/api/videos/${video_id}/comment`, {
     method: "POST",
-    data: data
+    data: data,
   })
-    .done(function(res, statusText, xhr) {
+    .done(function (res, statusText, xhr) {
       appendComment(res, true);
 
       const count =
-        Number(
-          $(".comment-overall")
-            .text()
-            .match(/\d/g)
-            .join("")
-        ) + 1;
+        Number($(".comment-overall").text().match(/\d/g).join("")) + 1;
 
       $(".comment-overall").text("댓글 " + count + "개");
     })
-    .fail(function(xhr, statusText) {
+    .fail(function (xhr, statusText) {
       // console.log(xhr);
     });
 
   e.target.commentFormText.value = "";
 });
 
-$(window).on("scroll", function() {
+$(window).on("scroll", function () {
   const scrollTop = $("html").scrollTop();
   const scrollTopMax = $("html").prop("scrollTopMax");
 
@@ -104,22 +97,22 @@ if (token === null) {
   $("#comment-form").hide();
 }
 
-$("#delete-button").on("click", function() {
+$("#delete-button").on("click", function () {
   data = {
     token: token,
-    csrfmiddlewaretoken: $("#token-form")[0].csrfmiddlewaretoken.value
+    csrfmiddlewaretoken: $("#token-form")[0].csrfmiddlewaretoken.value,
   };
 
   $.ajax(`/api/videos/${video_id}`, {
     method: "DELETE",
-    data: data
+    data: data,
   })
-    .done(function(res, statusText, xhr) {
+    .done(function (res, statusText, xhr) {
       // console.log(xhr.status);
       alert("삭제되었습니다.");
       window.location.href = "/";
     })
-    .fail(function(xhr, statusText) {
+    .fail(function (xhr, statusText) {
       console.log(xhr.responseJSON);
     });
 });

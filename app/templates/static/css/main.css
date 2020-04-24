@@ -197,3 +197,29 @@ body {
 hr {
   margin: 5px 0px 5px 0px;
 }
+
+.menu-ul {
+  text-align: left;
+  list-style: none;
+  margin-top: 30px;
+  padding: 0;
+}
+
+.menu-ul li {
+  margin-top: 15px;
+  padding-left: 30px;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.menu-ul li:hover {
+  background-color: #16a085;
+}
+
+.menu-ul li:active {
+  background-color: #27ae60;
+}
