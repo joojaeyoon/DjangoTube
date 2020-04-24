@@ -1,10 +1,10 @@
-django
+django==2.2.9
 djangorestframework
 gunicorn
 whitenoise
 psycopg2-binary
 opencv-python
 Pillow
-
+django-cors-headers
 django-rest-auth
 django-allauth
